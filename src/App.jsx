@@ -90,9 +90,9 @@ function App() {
     <>
       <form onSubmit={handleSubmit}>
         <div className="w-full h-40 bg-gradient-to-b from-indigo-400 via-indigo-500 to-indigo-600 brightness-95">
-          <div className="grid md:grid-cols-12 sm:grid-cols-4 gap-10 pt-8">
-            <div className="md:col-span-3 md:block sm:hidden"></div>
-            <div className="md:col-span-4 sm:col-span-2">
+          <div className="grid md:grid-cols-12 sm:grid-cols-4 md:gap-10 sm:gap-4 pt-8">
+            <div className="col-span-3 md:block sm:hidden"></div>
+            <div className="md:col-span-4 sm:col-span-2 px-2">
               <div className="grid grid-cols-1 gap-1">
                 <label htmlFor="note">Type your note here</label>
                 <textarea
