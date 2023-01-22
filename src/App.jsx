@@ -89,10 +89,10 @@ function App() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <div className="w-full h-40 bg-gradient-to-b from-indigo-400 via-indigo-500 to-indigo-600">
-          <div className="grid grid-cols-12 gap-10 pt-8">
-            <div className="col-span-3"></div>
-            <div className="col-span-4">
+        <div className="w-full h-40 bg-gradient-to-b from-indigo-400 via-indigo-500 to-indigo-600 brightness-95">
+          <div className="grid md:grid-cols-12 sm:grid-cols-4 gap-10 pt-8">
+            <div className="md:col-span-3 md:block sm:hidden"></div>
+            <div className="md:col-span-4 sm:col-span-2">
               <div className="grid grid-cols-1 gap-1">
                 <label htmlFor="note">Type your note here</label>
                 <textarea
@@ -158,11 +158,10 @@ function App() {
           return (
             <div className={`flex-none w-80 h-52 relative shadow-inner shadow-md brightness-95 ${item.done ? 'opacity-80' : 'opacity-95'} ${item.priority === 'high' ? backgrounds[2] : item.priority === 'middle' ? backgrounds[1] : backgrounds[0] } rounded-lg`}>
                 <p className="px-8 py-2 text-xl">{item.note.split('\n')[0]}</p>
-                <hr className="w-5/6 mx-auto -mt-2"></hr>
-                
-                <p className={`p-2 whitespace-pre-wrap break-words ${item.done ? ' line-through' : ''}`}>{helpMeDisplayLines(item.note)}</p>
-                <button className="absolute right-2 bottom-2" onClick={() => deleteNote(item.id)}><FontAwesomeIcon icon={faTrashCan}/></button>
-                <button className="absolute right-8 bottom-2" onClick={() => setDone(item.id)}>{item.done ? <FontAwesomeIcon icon={faCheckSquare}/> : <FontAwesomeIcon icon={faSquare}/>}</button>
+                <div className={`w-5/6 h-0.5 mx-auto -mt-2 opacity-95 brightness-95 rounded ${item.priority === 'high' ? 'bg-red-400' : item.priority === 'middle' ? 'bg-yellow-400' : 'bg-green-400'}`}></div>
+                <p className={`p-2 pl-4 whitespace-pre-wrap break-words ${item.done ? ' line-through' : ''}`}>{helpMeDisplayLines(item.note)}</p>
+                <button className="absolute right-8 bottom-2 appearance-none focus:ring-2 focus:ring-blue-300" onClick={() => setDone(item.id)}>{item.done ? <FontAwesomeIcon icon={faCheckSquare}/> : <FontAwesomeIcon icon={faSquare}/>}</button>
+                <button className="absolute right-2 bottom-2 appearance-none focus:ring-2 focus:ring-blue-300" onClick={() => deleteNote(item.id)}><FontAwesomeIcon icon={faTrashCan}/></button>
             </div>
           )
         })}
