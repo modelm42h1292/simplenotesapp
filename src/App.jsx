@@ -16,7 +16,8 @@ function App() {
       note: '',
       priority: 'middle',
       id: nanoid(),
-      done: false
+      done: false,
+      timestamp: ''
     }
   )
 
@@ -24,16 +25,12 @@ function App() {
 
   const handleSubmit = event => {
     event.preventDefault()
-    if (noteData.note === '' || 'undefined') {
-      console.log('bke')
-      setNoteData(oldData => ({
-        ...oldData, 
-        note: 'No title\nNo content'
-      }))
-    }
-    console.log(noteData.note)
+    const date = new Date()
+    const tempNote = {...noteData}
+    tempNote.timestamp = date.toTimeString().slice(0, 8) + '  ' + date.toDateString().slice(-11)
+    
     setNoteList(prevNotes => ([
-      noteData,
+      tempNote,
       ...prevNotes
     ]
     ))
@@ -41,7 +38,8 @@ function App() {
         note: '',
         priority: 'middle',
         id: nanoid(),
-        done: false
+        done: false,
+        timestamp: ''
       }
       )
   }
@@ -78,11 +76,9 @@ function App() {
     const duplicateList = [...noteList]
     for (let i = 0; i < duplicateList.length; i++) {
       if (duplicateList[i].id === idInput) {
-        console.log(duplicateList[i].id, idInput)
         duplicateList[i].done = !duplicateList[i].done
       }
     }
-    console.log(duplicateList)
     setNoteList(duplicateList)
   }
 
@@ -111,7 +107,7 @@ function App() {
             <div><p>Priority</p></div>
             <div className="flex items-center flex-row gap-2">
               <input
-                className="appearance-none bg-slate-100 border-2 border-slate-200 focus:opacity-100 checked:bg-red-400 focus:border-blue-300 focus:outline-none transition duration-200 rounded-full cursor-pointer w-4 h-4 my-1"
+                className="appearance-none bg-slate-100 border-2 border-slate-200 checked:bg-red-400 focus:border-blue-300 focus:outline-none transition duration-200 rounded-full cursor-pointer w-4 h-4 my-1"
                 type='radio'
                 name='priority'
                 value='high'
@@ -123,7 +119,7 @@ function App() {
 
             <div className="flex items-center flex-row gap-2">
               <input
-                className="appearance-none bg-slate-100 border-2 border-slate-200 focus:opacity-100 checked:bg-yellow-400 focus:border-blue-300 focus:outline-none transition duration-200 rounded-full cursor-pointer w-4 h-4 my-1"
+                className="appearance-none bg-slate-100 border-2 border-slate-200 checked:bg-yellow-400 focus:border-blue-300 focus:outline-none transition duration-200 rounded-full cursor-pointer w-4 h-4 my-1"
                 type='radio'
                 name='priority'
                 value='middle'
@@ -135,7 +131,7 @@ function App() {
 
             <div className="flex items-center flex-row gap-2">
               <input
-                className="appearance-none bg-slate-100 border-2 border-slate-200 focus:opacity-100 checked:bg-green-400 focus:border-blue-300 focus:outline-none transition duration-200 rounded-full cursor-pointer w-4 h-4 my-1"
+                className="appearance-none bg-slate-100 border-2 border-slate-200 checked:bg-green-400 focus:border-blue-300 focus:outline-none transition duration-200 rounded-full cursor-pointer w-4 h-4 my-1"
                 type='radio'
                 name='priority'
                 value='low'
@@ -153,18 +149,21 @@ function App() {
           </div>
         </div>
       </form>
-      <div className="flex flex-row flex-wrap justify-start gap-y-16 gap-x-10 p-10">
-        {noteList.map(item => {
-          return (
-            <div className={`flex-none w-80 h-52 relative shadow-inner shadow-md brightness-95 ${item.done ? 'opacity-80' : 'opacity-95'} ${item.priority === 'high' ? backgrounds[2] : item.priority === 'middle' ? backgrounds[1] : backgrounds[0] } rounded-lg`}>
-                <p className="px-8 py-2 text-xl">{item.note.split('\n')[0]}</p>
-                <div className={`w-5/6 h-0.5 mx-auto -mt-2 opacity-95 brightness-95 rounded ${item.priority === 'high' ? 'bg-red-400' : item.priority === 'middle' ? 'bg-yellow-400' : 'bg-green-400'}`}></div>
-                <p className={`p-2 pl-4 whitespace-pre-wrap break-words ${item.done ? ' line-through' : ''}`}>{helpMeDisplayLines(item.note)}</p>
-                <button className="absolute right-8 bottom-2 appearance-none focus:ring-2 focus:ring-blue-300" onClick={() => setDone(item.id)}>{item.done ? <FontAwesomeIcon icon={faCheckSquare}/> : <FontAwesomeIcon icon={faSquare}/>}</button>
-                <button className="absolute right-2 bottom-2 appearance-none focus:ring-2 focus:ring-blue-300" onClick={() => deleteNote(item.id)}><FontAwesomeIcon icon={faTrashCan}/></button>
-            </div>
-          )
-        })}
+      <div className="w-fit mx-auto">
+        <div className="flex flex-row flex-wrap justify-center gap-y-16 gap-x-10 p-10">
+          {noteList.map(item => {
+            return (
+              <div key={item.id} className={`flex-none w-80 h-52 overflow-clip relative shadow-inner shadow-md brightness-95 ${item.done ? 'opacity-80' : 'opacity-95'} ${item.priority === 'high' ? backgrounds[2] : item.priority === 'middle' ? backgrounds[1] : backgrounds[0] } rounded-lg`}>
+                  <p className="px-8 py-2 text-xl">{item.note.split('\n')[0]}</p>
+                  <div className={`w-5/6 h-0.5 mx-auto -mt-2 opacity-95 brightness-95 rounded ${item.priority === 'high' ? 'bg-red-400' : item.priority === 'middle' ? 'bg-yellow-400' : 'bg-green-400'}`}></div>
+                  <p className={` pl-4 pb-8 whitespace-pre-wrap break-words ${item.done ? ' line-through' : ''}`}>{helpMeDisplayLines(item.note)}</p>
+                  <p className="absolute bottom-2 left-2">{item.timestamp}</p>
+                  <button className="absolute right-8 bottom-2 appearance-none focus:ring-2 focus:ring-blue-300" onClick={() => setDone(item.id)}>{item.done ? <FontAwesomeIcon icon={faCheckSquare}/> : <FontAwesomeIcon icon={faSquare}/>}</button>
+                  <button className="absolute right-2 bottom-2 appearance-none focus:ring-2 focus:ring-blue-300" onClick={() => deleteNote(item.id)}><FontAwesomeIcon icon={faTrashCan}/></button>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </>
   )
